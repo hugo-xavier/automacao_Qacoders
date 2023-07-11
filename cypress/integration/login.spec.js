@@ -1,7 +1,6 @@
 describe('Teste de fazer login', () => {
     beaforeEach(() => {
-        cy.loginQacoders(Cypress.env('usuario'), Cypress.env('senha'))
-        
-            
+        cy.loginQacoders(Cypress.env('mail'), Cypress.env('password'))
+                  
     })
 })
