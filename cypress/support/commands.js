@@ -1,13 +1,23 @@
-Cypress.Commands.add('loginQacoders', (mail, password) => {
+Cypress.Commands.add('loginWithToken', () => {
+    const mail = 'hugoLMA@qacoders.com';
+    const password = 'Hugo@#123';
+    
     cy.request({
-        url: Cypress.env("baseUrl") + '/login',
-        method: 'POST',
-        body:{
-            mail: mail,
-            password: password
-        },
-    }).then((res) => {
-        Cypress.env('tokenLogin', res.body.token)
+      method: 'POST',
+      url:`${Cypress.env("baseUrl")}/login`,
+      body: {
+        mail: mail,
+        password: password
+      },
+     
+    }).then(response => { 
+        if(response.status == 200){
+            let authorizationToken = response.body.token
+            Cypress.env("authorizationToken", authorizationToken)
+            cy.log(authorizationToken)
+        }
     })
-   
+
 })
+  
+  
