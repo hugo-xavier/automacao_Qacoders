@@ -1,5 +1,5 @@
 Cypress.Commands.add('loginWithToken', () => {
-    const mail = 'hugoLMA@qacoders.com';
+    const mail = 'hugolima@qacoders.com';
     const password = 'Hugo@#123';
     
     cy.request({
