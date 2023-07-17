@@ -18,6 +18,11 @@ Cypress.Commands.add('loginWithToken', () => {
         }
     })
 
+  Cypress.Commands.add('generateUniqueId', () => {
+      return Cypress._.uniqueId()
+    })
+      
+
 })
   
   
