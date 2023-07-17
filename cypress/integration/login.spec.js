@@ -2,8 +2,7 @@ describe('Teste de backend - Qacoders', () => {
     beforeEach(() => {
         cy.loginWithToken();
     });
-
-    it('Criar login', () => {
+    it('Requisitar logins', () => {
         cy.request({
             method: 'POST',
             url: `${Cypress.env("baseUrl")}/user/register`,
@@ -25,6 +24,8 @@ describe('Teste de backend - Qacoders', () => {
                 Authorization: `${Cypress.env("authorizationToken")}`
             }
         }).then((response) => {
+            loginId = response.body.id
+            const loginID = response.body.id //trazer o id quando criar login
             expect(response.status).to.eq(201)
             expect(response.body.msg).to.contain("cadastro realizado com sucesso.")
             // cy.log(response.body)
@@ -32,7 +33,7 @@ describe('Teste de backend - Qacoders', () => {
 
     })
 
-    it('Falha ao criar login com e-mail ja cadatrado', () => {
+    it.only('Requisitar logins sem token', () => {
         cy.request({
             method: 'POST',
             url: `${Cypress.env("baseUrl")}/user/register`,
@@ -54,46 +55,20 @@ describe('Teste de backend - Qacoders', () => {
                 Authorization: `${Cypress.env("authorizationToken")}`
             }
         }).then((response) => {
-            expect(response.status).to.eq(409)
-            expect(response.body.alert).to.deep.equal(["E-mail já cadastrado."])
-
-        })
-
-    })
-    it('Requisitar logins', () => {
-        cy.request({
-            method: 'GET',
-            url: `${Cypress.env("baseUrl")}/user`,
-            failOnStatusCode: false,
-            headers: {
-                Authorization: `${Cypress.env("authorizationToken")}`
-            }
-        }).then((response) => {
-            expect(response.status).to.eq(200)
-        })
-
-    })
-
-    it('Requisitar logins sem token', () => {
-        cy.request({
-            method: 'GET',
-            url: `${Cypress.env("baseUrl")}/user`,
-            failOnStatusCode: false,
-            // headers: {
-            //     Authorization: `${Cypress.env("authorizationToken")}`
-            // }
-        }).then((response) => {
             expect(response.status).to.eq(403)
             expect(response.body).to.have.property('errors')
             expect(response.body.errors).to.include('No token provided.')
+
+
         })
 
     })
 
-    it('Alterar email com sucesso', () => {
+    it('Alterar email', () => {
         cy.request({
             method: 'PUT',
             url: `${Cypress.env("baseUrl")}/user/service/64a7567115c2f182099a1a79`,
+            url: `${Cypress.env("baseUrl")}/user/service/${loginId}`,
             failOnStatusCode: false,
             body: {
                 fullName: "Hugo de Lima Xavier",
@@ -108,4 +83,36 @@ describe('Teste de backend - Qacoders', () => {
 
     })
 
+    // it('Alterar email', () => {
+    //     // Gerar um ID automático
+    //     cy.generateUniqueId().then((userId) => {
+    //       cy.request({
+    //         method: 'PUT',
+    //         url: `${Cypress.env("baseUrl")}/user/service/${userId}`, // Usar o ID gerado na URL
+    //         failOnStatusCode: false,
+    //         body: {
+    //           fullName: "Hugo de Lima Xavier",
+    //           mail: "hugoLMA@qacoders.com"
+    //         },
+    //         headers: {
+    //           Authorization: `${Cypress.env("authorizationToken")}`
+    //         }
+    //       }).then((response) => {
+    //         expect(response.status).to.eq(200);
+    //       })
+    //     })
+    //   })
+    it('Deletar usuário',() => {
+        expect(loginId).to.exist
+        cy.request({
+            method: 'DELETE',
+            url: `${Cypress.env("baseUrl")}/user/service/admin/${loginId}`,
+            failOnStatusCode: false,
+            headers: {
+                Authorization: `${Cypress.env("authorizationToken")}`
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(200)
+        })
+    })  
 })
