@@ -17,12 +17,6 @@ Cypress.Commands.add('loginWithToken', () => {
             cy.log(authorizationToken)
         }
     })
-
-  Cypress.Commands.add('generateUniqueId', () => {
-      return Cypress._.uniqueId()
-    })
-      
-
 })
   
   
