@@ -9,6 +9,7 @@ describe('Validar campo fullName Login - Qacoders', () => {
             failOnStatusCode: false,
             body: {
                 fullName: "Hugo de Lima Xavier",
+                cpf:"",
                 mail: "hugoqa@qacoders.com",
                 password: "Hugo@#123",
                 confirmPassword: "Hugo@#123",
